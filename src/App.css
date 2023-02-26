@@ -1,13 +1,22 @@
 :root {
-  --cell-side: 5rem;
+  --cell-side: 10vh;
+  margin: 0px;
+  padding: 0px;
 }
 .App {
   height: 100vh;
   width: 100vw;
-  display:flex;
-  justify-content:center;
+  display: flexbox;
   align-items: center; 
   background-color: antiquewhite;
+}
+
+.chess {
+  height: 95vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .board {
@@ -38,10 +47,6 @@
   position: relative;
 }
 
-/* .board.currentBlack .square img {
-  transform: rotate(180deg);
-} */
-
 .black {
   background-color: #364549;
 }
@@ -63,8 +68,25 @@
 .active:hover {
   background-color: aquamarine !important;
 }
+.clickable, .clickable * {
+  cursor: pointer;
+  user-select: none;
+}
+.info {
+  padding: 10px;
+  background-color: aquamarine;
+  display: flex;
+  flex-wrap: wrap;
+}
+.info *:not([type=checkbox]) {
+  margin-right: calc(var(--cell-side)/5);
+}
 
-@media only screen and (max-width: 600px) {
+[draggable=true] {
+  cursor: move;
+}
+
+@media only screen and (orientation: portrait) {
   :root {
     --cell-side: 10vw;
   }

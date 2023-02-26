@@ -4,20 +4,22 @@ import { Square } from "../Square";
 import { PieceTypes } from "./PieceTypes";
 import blackKnight from "../../logos/bN.png";
 import whiteKnight from "../../logos/wN.png";
+import { Chess } from "../Chess";
 
 export class Knight extends Piece {
     constructor(color: Color) {
         super(PieceTypes.KNIGTH, color, color === Color.WHITE ? whiteKnight : blackKnight);
     }
 
-    public checkRules(fromSquare: Square, toSquare: Square): boolean {
-        console.log('hi');
-        const dx = Math.abs(toSquare.x - fromSquare.x);
-        const dy = Math.abs(toSquare.y - fromSquare.y)
-        if((dx === 1 && dy === 2) || (dx === 2 && dy ===1)) {
-            return true;
-        }
-        return false;
+    public setAccessibleSquares(fromSquare: Square, chess: Chess): void {   
+        chess.storage = chess.storage.map(elem => {
+            const dx = Math.abs(elem.x - fromSquare.x);
+            const dy = Math.abs(elem.y - fromSquare.y);
+            if(((dx === 1 && dy === 2) || (dx === 2 && dy ===1)) && elem.piece?.color !== fromSquare.piece?.color) {
+                elem.accessible = true;
+            }
+            return elem
+        });
     }
 }
 

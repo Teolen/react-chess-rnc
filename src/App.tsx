@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Chess } from './classes/Chess';
-import logo from './logo.svg';
 import './App.css';
 import BoardComponent from './components/BoardComponent';
-import { Square } from './classes/Square';
+import { Color } from './classes/Color';
 
 function App() {
 
   const [chess, setChess] = useState(new Chess())
   const [board, setBoard] = useState(chess.storage);
+  const [changingSides, setChangingSides] = useState(false);
+  const [currentColor, setCurrentColor] = useState(Color.WHITE);
 
   useEffect(()=> {
     start();
@@ -20,7 +21,6 @@ function App() {
     if(temp.length) {
       localStorage.setItem('savedStorage', JSON.stringify(temp));
     }
-    console.log('update-saving', temp);
   };
 
   const clearData = () => {
@@ -29,19 +29,42 @@ function App() {
     update();
   };
 
-  function start() {
+  const start = () => {
     const savedJson = localStorage.getItem('savedStorage');
     const saved = savedJson ? JSON.parse(savedJson) : null;
-    console.log('saved', saved)
     chess.initializalion(saved);
+    const savedColor = localStorage.getItem('savedColor');
+    if(savedColor) {
+      setCurrentColor(savedColor == Color.BLACK ? Color.BLACK : Color.WHITE);
+    }
+    const savedChanging = localStorage.getItem('changingSides');
+    if(savedChanging) {
+      setChangingSides(() => savedChanging.toLowerCase() === "true")
+    }
     update();
   }
 
+  const swapColor = () => {
+    if(changingSides) {
+        setCurrentColor(prev => {
+          const color = prev === Color.WHITE ? Color.BLACK : Color.WHITE
+          localStorage.setItem('savedColor', color);
+          return color;
+        }); 
+    }
+  };
+
   return (
-    <div>
-      <button onClick={() => clearData()}>Remove saved data</button>
-      <div className="App">
-        <BoardComponent chess={chess} storage = {board} update = {update}/>
+    <div className='App'>
+        <div className='info'>
+          <span>Current: {currentColor}</span>
+          <button onClick={() => clearData()}>Remove saved data</button>
+          <div className="clickable" onClick={() => setChangingSides(prev => {localStorage.setItem('changingSides', (!prev).toString()); return !prev;})}>
+            <input type="checkbox" checked={changingSides} readOnly/> Changing sides
+          </div>
+        </div>
+      <div className="chess">
+        <BoardComponent chess={chess} storage = {board} update = {update} swapColor={swapColor} currentColor={currentColor}/>
       </div>
     </div>
 

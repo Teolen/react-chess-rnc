@@ -1,6 +1,7 @@
 import { Color } from "./Color"
 import { Piece } from "./pieces/Piece";
 
+// Клетка: хранит координаты, свой цвет и фигуру, которая находится в клетке, а также флаг доступности клетки
 export class Square {
     readonly x: number;
     readonly y: number;
