@@ -21,11 +21,13 @@ function App() {
     if(temp.length) {
       localStorage.setItem('savedStorage', JSON.stringify(temp));
     }
+    localStorage.setItem('savedColor', (currentColor).toString())
   };
 
   const clearData = () => {
     localStorage.removeItem('savedStorage');
     chess.initializalion(null);
+    setCurrentColor(Color.WHITE);
     update();
   };
 
@@ -58,7 +60,7 @@ function App() {
     <div className='App'>
         <div className='info'>
           <span>Current: {currentColor}</span>
-          <button onClick={() => clearData()}>Remove saved data</button>
+          <button onClick={() => clearData()}>Restart</button>
           <div className="clickable" onClick={() => setChangingSides(prev => {localStorage.setItem('changingSides', (!prev).toString()); return !prev;})}>
             <input type="checkbox" checked={changingSides} readOnly/> Changing sides
           </div>
